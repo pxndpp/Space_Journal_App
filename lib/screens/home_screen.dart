@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:nasa_space_story/widgets/SpaceCard.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -29,9 +29,10 @@ class _HomeScreenState extends State<HomeScreen>{
       ),
       body: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("TEST1"),
-            Text("TEST2")
+            SpaceCard(),
+            Text("TEST3")
           ],
         ),
       ),
