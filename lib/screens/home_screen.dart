@@ -27,6 +27,14 @@ class _HomeScreenState extends State<HomeScreen>{
             icon: Icon(Icons.book))
         ],
       ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Text("TEST1"),
+            Text("TEST2")
+          ],
+        ),
+      ),
     );
   }
 
