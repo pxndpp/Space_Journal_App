@@ -1,14 +1,34 @@
 import 'package:flutter/material.dart';
 
 class SpaceCard extends StatelessWidget {
-  const SpaceCard({super.key});
+  final String imgURL;
+  final String title;
+  const SpaceCard({required this.imgURL, required this.title});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text("TEST123")
-      ],
+    return Container(
+      margin: EdgeInsets.all(20), // เว้นระยะห่างรอบตัวเงา
+      padding: EdgeInsets.all(16), // เว้นระยะห่างระหว่างเงากับเนื้อหาข้างใน
+      decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(15), // ทำมุมมน
+      boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1), // สีของเงา
+            spreadRadius: 5, // การแผ่กระจายของเงา
+            blurRadius: 7, // ความฟุ้งของเงา
+            offset: Offset(0, 3), // ตำแหน่งเงา (x, y)
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Image.network(imgURL),
+          SizedBox(height: 16),
+          Text(title),
+        ],
+      ),
     );
   }
 }

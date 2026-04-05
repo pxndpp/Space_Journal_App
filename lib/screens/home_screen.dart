@@ -28,13 +28,15 @@ class _HomeScreenState extends State<HomeScreen>{
         ],
       ),
       body: SingleChildScrollView(
+        child:Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SpaceCard(),
+            SpaceCard(imgURL: 'https://picsum.photos/250?image=9', title: 'TEST',),
             Text("TEST3")
           ],
         ),
+      ),
       ),
     );
   }
