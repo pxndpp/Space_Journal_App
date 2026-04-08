@@ -17,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen>{
   Widget build(Object context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blueGrey,
         title: const Text("NASA JOURNAL"),
         centerTitle: true,
         actions: [
@@ -34,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen>{
           children: [
             SpaceCard(imgURL: 'https://picsum.photos/250?image=9', title: 'TEST',),
             Text("TEST3")
+
           ],
         ),
       ),
