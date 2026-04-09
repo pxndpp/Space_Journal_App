@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class SpaceCard extends StatelessWidget {
   final String imgURL;
   final String title;
-  const SpaceCard({super.key, required this.imgURL, required this.title});
+  final String explanation;
+  const SpaceCard({super.key, required this.imgURL, required this.title, required this.explanation});
 
   @override
   Widget build(BuildContext context) {
