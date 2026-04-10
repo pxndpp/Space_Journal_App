@@ -33,19 +33,16 @@ class _HomeScreenState extends State<HomeScreen>{
     try{
       // ส่งวันที่ไปและเรียก api พร้อมรอจนเสร็จ
       _spaceData = await ApiService().fetchData(date: date);
-      //อัปเดตหน้าจอเป็น !loading
-      setState(() {
-        isLoading = false;
-      });
     } catch(e){
-        setState(() {
-          isLoading = false;
-          print('Something wrong : $e');
           errorMessage = e.toString();
           print('Something wrong : $e');
+        }
+      finally{
+        //อัปเดตหน้าจอเป็น !loading
+        setState(() {
+        isLoading = false;
         });
-        
-    }
+      }
   }
 
 
@@ -65,12 +62,24 @@ class _HomeScreenState extends State<HomeScreen>{
             icon: Icon(Icons.book))
         ],
       ),
-      body: SingleChildScrollView(
+      body: isLoading
+          //เช็ค loading ถ้ากำลังโหลดให้แสดงหน้ากำลังโหลด
+          ? const Center(
+            child: CircularProgressIndicator()
+          )
+      : SingleChildScrollView(
         child:Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SpaceCard(imgURL: 'https://picsum.photos/250?image=9', title: 'TEST',),
+            if (_spaceData != null) 
+              SpaceCard(
+                imgURL: _spaceData!.imageURL, 
+                title: _spaceData!.title,
+                explanation: _spaceData!.explanation,
+                copyright: _spaceData!.copyright,
+                date: _spaceData!.date,
+              ),
             Text("TEST3")
 
           ],

@@ -4,7 +4,9 @@ class SpaceCard extends StatelessWidget {
   final String imgURL;
   final String title;
   final String explanation;
-  const SpaceCard({super.key, required this.imgURL, required this.title, required this.explanation});
+  final String copyright;
+  final String date;
+  const SpaceCard({super.key, required this.imgURL, required this.title, required this.explanation, required this.copyright, required this.date});
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +27,20 @@ class SpaceCard extends StatelessWidget {
       ),
       child: Column(
         children: [
+          Text(date),
           Image.network(imgURL),
           SizedBox(height: 16),
-          Text(title),
+          Text(title, 
+                    style: TextStyle(
+                    fontWeight: FontWeight.bold)
+            ),
+          SizedBox(height: 5),
+          Text(explanation),
+          Text("Image Credit & Copyright by $copyright",
+                    style: TextStyle(
+                    fontWeight: FontWeight.bold)
+            ),
+
         ],
       ),
     );
