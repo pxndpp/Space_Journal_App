@@ -18,7 +18,7 @@ class ApodEntry {
       title: json['title'] ?? 'No Title', 
       date: json['date'] ?? '', 
       explanation: json['explanation'] ?? 'No Description', 
-      imageURL: json['imageURL'] ?? '', 
+      imageURL: json['url'] ?? '', 
       copyright: json['copyright'] ?? '');
   }
 }
