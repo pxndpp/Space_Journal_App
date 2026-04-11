@@ -80,11 +80,24 @@ class _HomeScreenState extends State<HomeScreen>{
                 copyright: _spaceData!.copyright,
                 date: _spaceData!.date,
               ),
-              IconButton(
-                      tooltip: 'Change date',
-                      onPressed: (){print("TEST");}, 
-                      icon: Icon(Icons.calendar_today),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                          tooltip: 'Change date',
+                          onPressed: (){print("TEST");}, 
+                          icon: Icon(Icons.calendar_today),
+                    ),
+                  Text('Change Date'),
+                  SizedBox(width: 30),
+                  IconButton(
+                          tooltip: 'SAVE',
+                          onPressed: (){print("TEST SAVE");}, 
+                          icon: Icon(Icons.favorite),
+                    ),
+                  Text("Save"),
+                ],
+              ),
             ],
           ),
         ),
