@@ -18,7 +18,7 @@ class SpaceCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(17), // ทำมุมมน
       boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1), // สีของเงา
+            color: Colors.black.withValues(alpha: 0.1), // สีของเงา
             spreadRadius: 5, // การแผ่กระจายของเงา
             blurRadius: 7, // ความฟุ้งของเงา
             offset: Offset(0, 3), // ตำแหน่งเงา (x, y)
@@ -27,7 +27,10 @@ class SpaceCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(date),
+          Text(date, 
+                    style: TextStyle(
+                    fontWeight: FontWeight.bold)
+            ),
           Image.network(imgURL),
           SizedBox(height: 16),
           Text(title, 
@@ -36,7 +39,7 @@ class SpaceCard extends StatelessWidget {
             ),
           SizedBox(height: 5),
           Text(explanation),
-          Text("Image Credit & Copyright by $copyright",
+          Text("Image Credit : $copyright",
                     style: TextStyle(
                     fontWeight: FontWeight.bold)
             ),

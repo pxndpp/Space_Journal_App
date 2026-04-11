@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nasa_space_story/widgets/SpaceCard.dart';
+import 'package:nasa_space_story/widgets/spacecard.dart';
 import 'package:nasa_space_story/services/api_service.dart';
 import 'package:nasa_space_story/models/apod_entry.dart';
 
@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen>{
         actions: [
           IconButton(
             onPressed: (){
-              print('why');
+              print('why'); //for testing button
             }, 
             icon: Icon(Icons.book))
         ],
@@ -80,11 +80,14 @@ class _HomeScreenState extends State<HomeScreen>{
                 copyright: _spaceData!.copyright,
                 date: _spaceData!.date,
               ),
-            Text("TEST3")
-
-          ],
+              IconButton(
+                      tooltip: 'Change date',
+                      onPressed: (){print("TEST");}, 
+                      icon: Icon(Icons.calendar_today),
+                ),
+            ],
+          ),
         ),
-      ),
       ),
     );
   }
