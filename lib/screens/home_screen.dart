@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nasa_space_story/widgets/spacecard.dart';
 import 'package:nasa_space_story/services/api_service.dart';
 import 'package:nasa_space_story/models/apod_entry.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,9 +22,10 @@ class _HomeScreenState extends State<HomeScreen>{
   void initState() {
     super.initState();
     // เปิดหน้านี้ขึ้นมาสั่งดึงข้อมูลทันที
-    _fetchData(); 
+    _fetchData();
   }
 
+  /// ดึงข้อมูล
   Future<void> _fetchData({String? date}) async{
     //อัปเดตหน้าจอเป็น loading และเคลียร์ Error เก่า
     setState(() {
@@ -44,8 +46,23 @@ class _HomeScreenState extends State<HomeScreen>{
         });
       }
   }
-
-
+  /// Datepicker / ส่งวันที่ไปที่ _fetchData
+  Future<void> _selectDate() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? DateTime.now(),
+      firstDate: DateTime(1995, 6, 16), //วันแรกสุดของ APOD จาก nasa
+      lastDate: DateTime.now(),
+    );
+    if(pickedDate != null){
+      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+      print(formattedDate);
+      _fetchData(date: formattedDate);
+    }
+    setState(() {
+      _selectedDate = pickedDate;
+    });
+  }
 
   @override
   Widget build(Object context) {
@@ -85,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen>{
                 children: [
                   IconButton(
                           tooltip: 'Change date',
-                          onPressed: (){print("TEST");}, 
+                          onPressed: (){_selectDate();}, 
                           icon: Icon(Icons.calendar_today),
                     ),
                   Text('Change Date'),
@@ -104,7 +121,4 @@ class _HomeScreenState extends State<HomeScreen>{
       ),
     );
   }
-
-  
 }
-  
