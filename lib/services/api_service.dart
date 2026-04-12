@@ -1,4 +1,5 @@
 import 'dart:convert'; // ไว้แปลง JSON
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http; // package ไว้ต่อเน็ต 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nasa_space_story/models/apod_entry.dart';
@@ -26,7 +27,7 @@ class ApiService {
           throw Exception('Failed to load : ${response.statusCode}');
         } 
       } catch (e){
-          print('Something wrong : $e');
+          debugPrint('Something worng : $e');
           throw Exception('Check internet connection');
         }
   }

@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen>{
       _spaceData = await ApiService().fetchData(date: date);
     } catch(e){
           errorMessage = e.toString();
-          print('Something wrong : $e');
+          debugPrint('Something wrong : $e');
         }
       finally{
         //อัปเดตหน้าจอเป็น !loading
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen>{
     );
     if(pickedDate != null){
       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-      print(formattedDate);
+      debugPrint("formattedDate");
       _fetchData(date: formattedDate);
     }
     setState(() {
@@ -73,8 +73,9 @@ class _HomeScreenState extends State<HomeScreen>{
         centerTitle: true,
         actions: [
           IconButton(
+            // TODO: ทำให้กดปุ่มแล้วสลับไปหน้า Fav list
             onPressed: (){
-              print('why'); //for testing button
+              debugPrint('why'); //for testing button
             }, 
             icon: Icon(Icons.book))
         ],
@@ -107,9 +108,10 @@ class _HomeScreenState extends State<HomeScreen>{
                     ),
                   Text('Change Date'),
                   SizedBox(width: 30),
+                  // TODO: ทำปุ่ม save ให้กดแล้วมี textfield ที่ใส่โน๊ตได้
                   IconButton(
                           tooltip: 'SAVE',
-                          onPressed: (){print("TEST SAVE");}, 
+                          onPressed: (){debugPrint("TEST SAVE");}, 
                           icon: Icon(Icons.favorite),
                     ),
                   Text("Save"),
