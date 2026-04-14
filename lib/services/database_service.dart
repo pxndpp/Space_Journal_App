@@ -15,7 +15,8 @@ import 'package:hive_ce_flutter/hive_ce_flutter.dart';
 import 'package:nasa_space_story/models/favorite_note.dart';
 
 class DatabaseService {
-final _box = Hive.box<FavoriteNote>('fav_noted_Box');
+static const String boxName = 'fav_noted_box';
+Box<FavoriteNote> get _box => Hive.box<FavoriteNote>(boxName);
 
 Future<void> saveNote(FavoriteNote note) async {
     try {
@@ -29,7 +30,7 @@ List<FavoriteNote> getAllNote() {
     return _box.values.toList();
 }
 
-Future<void> DeleteNote(String date) async {
+Future<void> deleteNote(String date) async {
     try {
       await _box.delete(date);
     } catch (e) {
@@ -37,8 +38,9 @@ Future<void> DeleteNote(String date) async {
     }
 }
 
+// เช็คสถานะเพื่อเปลี่ยนไอคอนปุ่ม Save/Unsave หน้า Home
 bool isSaved(String date){
     return _box.containsKey(date);
-    /// มันจะคืนค่ากลับมาเป็น true ถ้าเคย save หรือ false ถ้าไม่
+    /// คืนค่ากลับมาเป็น true ถ้าเคย save หรือ false ถ้าไม่
 }
 }
