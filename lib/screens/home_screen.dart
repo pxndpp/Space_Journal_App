@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:nasa_space_story/widgets/custom_input_modal.dart';
+import 'package:nasa_space_story/models/favorite_note.dart';
+import 'package:nasa_space_story/services/database_service.dart';
 import 'package:nasa_space_story/widgets/spacecard.dart';
 import 'package:nasa_space_story/services/api_service.dart';
 import 'package:nasa_space_story/models/apod_entry.dart';
@@ -17,12 +20,15 @@ class _HomeScreenState extends State<HomeScreen>{
   String? errorMessage; //null safety
   ApodEntry? _spaceData; //เก็บข้อมูลที่ได้จาก API
   DateTime? _selectedDate; //เก็บวันที่ user เลือก
+  final DatabaseService _dbService = DatabaseService();
   
   @override
   void initState() {
     super.initState();
-    // เปิดหน้านี้ขึ้นมาสั่งดึงข้อมูลทันที
+    //รอให้หน้าจอ Render เฟรมแรกเสร็จก่อน แล้วค่อยเรียก API
+    WidgetsBinding.instance.addPostFrameCallback((_){
     _fetchData();
+    });
   }
 
   /// ดึงข้อมูล
@@ -30,19 +36,21 @@ class _HomeScreenState extends State<HomeScreen>{
     //อัปเดตหน้าจอเป็น loading และเคลียร์ Error เก่า
     setState(() {
       isLoading = true;
-      errorMessage = '';
+      errorMessage = null;
     });
     try{
       // ส่งวันที่ไปและเรียก api พร้อมรอจนเสร็จ
       _spaceData = await ApiService().fetchData(date: date);
     } catch(e){
-          errorMessage = e.toString();
+          errorMessage = 'Look like ours engine is down!, Let wait for a few minute';
           debugPrint('Something wrong : $e');
         }
       finally{
         //อัปเดตหน้าจอเป็น !loading
-        setState(() {
-        isLoading = false;
+        // เช็คว่าหน้าจอยังเปิดอยู่ไหมก่อนสั่ง setState
+        if (!mounted) return; 
+          setState(() {
+          isLoading = false;
         });
       }
   }
@@ -54,22 +62,23 @@ class _HomeScreenState extends State<HomeScreen>{
       firstDate: DateTime(1995, 6, 16), //วันแรกสุดของ APOD จาก nasa
       lastDate: DateTime.now(),
     );
+    if (!mounted) return;
     if(pickedDate != null){
       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
       debugPrint("formattedDate");
+      setState(() {
+      _selectedDate = pickedDate; 
+      });
       _fetchData(date: formattedDate);
     }
-    setState(() {
-      _selectedDate = pickedDate;
-    });
   }
 
   @override
-  Widget build(Object context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey,
-        title: const Text("NASA JOURNAL"),
+        title: const Text("SPACE JOURNAL"),
         centerTitle: true,
         actions: [
           IconButton(
@@ -84,6 +93,18 @@ class _HomeScreenState extends State<HomeScreen>{
           //เช็ค loading ถ้ากำลังโหลดให้แสดงหน้ากำลังโหลด
           ? const Center(
             child: CircularProgressIndicator()
+          )
+      : errorMessage != null 
+        ? Center( 
+          //ถ้ามี Error โชว์แค่ Error Message
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text(
+                errorMessage!,
+                style: const TextStyle(color: Colors.red, fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+            ),
           )
       : SingleChildScrollView(
         child:Center(
@@ -108,15 +129,26 @@ class _HomeScreenState extends State<HomeScreen>{
                     ),
                   Text('Change Date'),
                   SizedBox(width: 30),
-                  // TODO: ทำปุ่ม save ให้กดแล้วมี textfield ที่ใส่โน๊ตได้
                   IconButton(
                           tooltip: 'SAVE',
-                          onPressed: (){debugPrint("TEST SAVE");}, 
-                          icon: Icon(Icons.favorite),
+                          onPressed: (){
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true, // เผื่อพิมพ์คีย์บอร์ดแล้วบังหน้าจอ
+                              builder: (context) {
+                                return CustomInputModal(
+                                  onSubmit: (String inputValue) {
+                                    debugPrint("Input val: $inputValue");
+                                  },
+                                );
+                              },
+                            );
+                          },icon: Icon(Icons.favorite),
                     ),
                   Text("Save"),
                 ],
               ),
+              const SizedBox(height: 30),
             ],
           ),
         ),
@@ -124,3 +156,4 @@ class _HomeScreenState extends State<HomeScreen>{
     );
   }
 }
+
