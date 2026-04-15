@@ -11,7 +11,7 @@ void main() async{
 
   await Hive.initFlutter();
   Hive.registerAdapter(FavoriteNoteAdapter());
-  await Hive.openBox('fav_noted_Box');
+  await Hive.openBox<FavoriteNote>('fav_noted_Box');
   
   runApp(const MaterialApp(
     home: HomeScreen()
