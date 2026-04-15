@@ -2,14 +2,14 @@ class ApodEntry {
   final String title;
   final String date;
   final String explanation;
-  final String imageURL;
+  final String imgURL;
   final String copyright;
 
   ApodEntry({
     required this.title, 
     required this.date, 
     required this.explanation, 
-    required this.imageURL, 
+    required this.imgURL, 
     required this.copyright
   });
 
@@ -18,7 +18,7 @@ class ApodEntry {
       title: json['title'] ?? 'No Title', 
       date: json['date'] ?? '', 
       explanation: json['explanation'] ?? 'No Description', 
-      imageURL: json['url'] ?? '', 
+      imgURL: json['url'] ?? '', 
       copyright: json['copyright'] ?? '');
   }
 }
