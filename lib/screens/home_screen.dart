@@ -72,6 +72,27 @@ class _HomeScreenState extends State<HomeScreen>{
       _fetchData(date: formattedDate);
     }
   }
+  /// save ลง DB ด้วยการรับค่าที่คืนมาจาก textdield ในตัว modal แล้วมาปั้นเป็น obj ยัดลง database
+  Future<void> _saveToDatabase({String? u_note}) async{
+    if (_spaceData == null) return;
+
+    final note = FavoriteNote(
+      date: _spaceData!.date, 
+      title: _spaceData!.title, 
+      imgURL: _spaceData!.imgURL, 
+      userNote: u_note); // ดึงค่าจากตัวที่พิมพ์ใน Modal
+
+      try {
+        await _dbService.saveNote(note);
+      } catch (e) {
+        debugPrint("something wrong in DB service : $e");
+      }
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('SAVED')),
+        );
+      }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +104,18 @@ class _HomeScreenState extends State<HomeScreen>{
         actions: [
           IconButton(
             // TODO: ทำให้กดปุ่มแล้วสลับไปหน้า Fav list
-            onPressed: (){
+            onPressed: () async {
+              /* Testing read all item in box
               debugPrint('why'); //for testing button
+              try {
+                var list = await _dbService.getAllNote();
+                for (var item in list) {
+                  debugPrint('วันที่: ${item.date} | ชื่อภาพ: ${item.title} | Note : ${item.userNote}');
+                }
+              } catch (e) {
+                debugPrint("something wrong in DB service : $e");
+              }
+              */
             }, 
             icon: Icon(Icons.book))
         ],
@@ -113,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen>{
           children: [
             if (_spaceData != null) 
               SpaceCard(
-                imgURL: _spaceData!.imageURL, 
+                imgURL: _spaceData!.imgURL, 
                 title: _spaceData!.title,
                 explanation: _spaceData!.explanation,
                 copyright: _spaceData!.copyright,
@@ -139,6 +170,7 @@ class _HomeScreenState extends State<HomeScreen>{
                                 return CustomInputModal(
                                   onSubmit: (String inputValue) {
                                     debugPrint("Input val: $inputValue");
+                                    _saveToDatabase(u_note: inputValue);
                                   },
                                 );
                               },
