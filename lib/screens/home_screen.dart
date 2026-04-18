@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nasa_space_story/screens/favorite_screen.dart';
 import 'package:nasa_space_story/widgets/custom_input_modal.dart';
 import 'package:nasa_space_story/models/favorite_note.dart';
 import 'package:nasa_space_story/services/database_service.dart';
@@ -94,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen>{
       }
   }
 
+////// Widget zone //////////////////////////////
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,18 +106,12 @@ class _HomeScreenState extends State<HomeScreen>{
         actions: [
           IconButton(
             // TODO: ทำให้กดปุ่มแล้วสลับไปหน้า Fav list
-            onPressed: () async {
-              /* Testing read all item in box
+            onPressed: () {
+              // Testing read all item in box
               debugPrint('why'); //for testing button
-              try {
-                var list = await _dbService.getAllNote();
-                for (var item in list) {
-                  debugPrint('วันที่: ${item.date} | ชื่อภาพ: ${item.title} | Note : ${item.userNote}');
-                }
-              } catch (e) {
-                debugPrint("something wrong in DB service : $e");
-              }
-              */
+              Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const Favscreen()),
+              );
             }, 
             icon: Icon(Icons.book))
         ],
