@@ -22,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen>{
   ApodEntry? _spaceData; //เก็บข้อมูลที่ได้จาก API
   DateTime? _selectedDate; //เก็บวันที่ user เลือก
   final DatabaseService _dbService = DatabaseService();
+  bool isSaved = false; // ไว้ใช้เช็คค่าให้ปุ่ม save เปิดปิด
   
   @override
   void initState() {
@@ -42,6 +43,8 @@ class _HomeScreenState extends State<HomeScreen>{
     try{
       // ส่งวันที่ไปและเรียก api พร้อมรอจนเสร็จ
       _spaceData = await ApiService().fetchData(date: date);
+      //เช็คว่ารูปของวันที่ส่งค่าไปเซฟแล้วยัง
+      isSaved = _dbService.isSaved(_spaceData!.date);
     } catch(e){
           errorMessage = 'Look like ours engine is down!, Let wait for a few minute';
           debugPrint('Something wrong : $e');
@@ -50,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen>{
         //อัปเดตหน้าจอเป็น !loading
         // เช็คว่าหน้าจอยังเปิดอยู่ไหมก่อนสั่ง setState
         if (!mounted) return; 
-          setState(() {
+        setState(() {
           isLoading = false;
         });
       }
@@ -85,10 +88,14 @@ class _HomeScreenState extends State<HomeScreen>{
 
       try {
         await _dbService.saveNote(note);
+        isSaved = _dbService.isSaved(_spaceData!.date);
       } catch (e) {
         debugPrint("something wrong in DB service : $e");
       }
       if (mounted) {
+        setState(() {
+          isSaved = _dbService.isSaved(_spaceData!.date);
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('SAVED')),
         );
@@ -123,13 +130,23 @@ class _HomeScreenState extends State<HomeScreen>{
           )
       : errorMessage != null 
         ? Center( 
-          //ถ้ามี Error โชว์แค่ Error Message
+          //ถ้ามี Error โชว์แค่ Error Message กับปุุ่ม change date
             child: Padding(
               padding: const EdgeInsets.all(20),
-              child: Text(
-                errorMessage!,
-                style: const TextStyle(color: Colors.red, fontSize: 16),
-                textAlign: TextAlign.center,
+              child: Column(
+                children: [
+                  Text(
+                    errorMessage!,
+                    style: const TextStyle(color: Colors.red, fontSize: 16),
+                    textAlign: TextAlign.center,),
+                  const SizedBox(height: 16),
+                  IconButton(
+                          tooltip: 'Change date',
+                          onPressed: (){_selectDate();}, 
+                          icon: Icon(Icons.calendar_today),
+                    ),
+                  Text('Select Date'),
+                ],
               ),
             ),
           )
@@ -159,6 +176,8 @@ class _HomeScreenState extends State<HomeScreen>{
                   IconButton(
                           tooltip: 'SAVE',
                           onPressed: (){
+                            //เงื่อนไข ? ถ้าจริง : ถ้าเท็จ
+                            isSaved ? null : 
                             showModalBottomSheet(
                               context: context,
                               isScrollControlled: true, // เผื่อพิมพ์คีย์บอร์ดแล้วบังหน้าจอ
@@ -171,9 +190,9 @@ class _HomeScreenState extends State<HomeScreen>{
                                 );
                               },
                             );
-                          },icon: Icon(Icons.favorite),
+                          }, icon: Icon(isSaved ? Icons.favorite : Icons.favorite_border),
                     ),
-                  Text("Save"),
+                  Text(isSaved ? 'Saved' : 'Save'),
                 ],
               ),
               const SizedBox(height: 30),
