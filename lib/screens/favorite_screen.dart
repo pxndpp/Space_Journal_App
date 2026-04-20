@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hive_ce/hive.dart';
 import 'package:nasa_space_story/models/favorite_note.dart';
 import 'package:nasa_space_story/services/database_service.dart';
+import 'package:nasa_space_story/widgets/custom_input_modal.dart';
+
 
 class Favscreen extends StatefulWidget{
     const Favscreen({super.key});
@@ -36,6 +37,39 @@ class _FavscreenState extends State<Favscreen>{
     _loadNote();
   }
 
+  void _showEditModal(FavoriteNote oldNote) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return CustomInputModal(
+          //ส่งข้อความเดิมไปให้ Modal แสดงผล
+          inputText: oldNote.userNote, 
+          
+          onSubmit: (String newText) async {
+            // เปลี่ยนแค่ userNote เป็นข้อความใหม่ที่เพิ่งพิมพ์
+            final updatedNote = FavoriteNote(
+              date: oldNote.date,
+              title: oldNote.title,
+              imgURL: oldNote.imgURL,
+              userNote: newText,
+            );
+
+            // สั่งเซฟ
+            await _dbService.saveNote(updatedNote);
+
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Done Update!')),
+              );
+              _loadNote();
+            }
+          },
+        );
+      },
+    );
+  }
+
   void _ShowConfirmDialog (String date) {
     showDialog(
       context: context, 
@@ -54,9 +88,8 @@ class _FavscreenState extends State<Favscreen>{
               onPressed: (){
                 Navigator.pop(context);
                 _deleteNote(date);
-                AlertDialog(
-                  title: Text('Deleted'),
-                  content: Text('Your note is deleted'),
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Deleted')),
                 );
               }, 
               child: const Text('Confirm', style: TextStyle(color: Colors.red),)
@@ -95,7 +128,9 @@ class _FavscreenState extends State<Favscreen>{
                 ),
                 title: Text(note.title, style: TextStyle(fontWeight: FontWeight.bold),),
                 subtitle: Text(note.userNote ?? ''),
-                trailing: IconButton(onPressed: (){_ShowConfirmDialog(note.date);}, icon: Icon(Icons.delete)),
+                onTap: () => _showEditModal(note),
+                trailing: IconButton(onPressed: () => _ShowConfirmDialog(note.date), icon: Icon(Icons.delete),
+                ) 
               );
           },
         ),
