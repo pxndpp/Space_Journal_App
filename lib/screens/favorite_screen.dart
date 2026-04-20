@@ -35,6 +35,37 @@ class _FavscreenState extends State<Favscreen>{
     }
     _loadNote();
   }
+
+  void _ShowConfirmDialog (String date) {
+    showDialog(
+      context: context, 
+      builder: (BuildContext context){
+        return AlertDialog(
+          title: Text('Are you sure?'),
+          content: Text('Your note will be deleted'),
+          actions: [
+            TextButton(
+              onPressed: (){
+                Navigator.pop(context);
+              }, 
+              child: const Text('Cancle')
+            ), 
+            TextButton(
+              onPressed: (){
+                Navigator.pop(context);
+                _deleteNote(date);
+                AlertDialog(
+                  title: Text('Deleted'),
+                  content: Text('Your note is deleted'),
+                );
+              }, 
+              child: const Text('Confirm', style: TextStyle(color: Colors.red),)
+            ),
+          ],
+        );
+      },
+    );
+  }
   
 @override
   Widget build(BuildContext context) {
@@ -52,6 +83,7 @@ class _FavscreenState extends State<Favscreen>{
                 // ดึงข้อมูลโน้ตออกมาทีละ 1 ตาม index
                 final note = _Favnote[index];
               
+              //TODO: เปลี่ยนเป็น Card
               return ListTile(
                 leading: ClipRRect(
                   borderRadius: BorderRadius.circular(3),
@@ -63,7 +95,7 @@ class _FavscreenState extends State<Favscreen>{
                 ),
                 title: Text(note.title, style: TextStyle(fontWeight: FontWeight.bold),),
                 subtitle: Text(note.userNote ?? ''),
-                trailing: IconButton(onPressed: (){_deleteNote(note.date);}, icon: Icon(Icons.delete)),
+                trailing: IconButton(onPressed: (){_ShowConfirmDialog(note.date);}, icon: Icon(Icons.delete)),
               );
           },
         ),
