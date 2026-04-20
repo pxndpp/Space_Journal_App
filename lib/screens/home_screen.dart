@@ -112,13 +112,16 @@ class _HomeScreenState extends State<HomeScreen>{
         centerTitle: true,
         actions: [
           IconButton(
-            // TODO: ทำให้กดปุ่มแล้วสลับไปหน้า Fav list
-            onPressed: () {
-              // Testing read all item in box
-              debugPrint('why'); //for testing button
-              Navigator.push(context,
+            //กดสลับไปหน้า Fav list รอให้ปิดหน้าแล้วเช็คเซฟใหม่
+            onPressed: () async{
+              await Navigator.push(context,
               MaterialPageRoute(builder: (context) => const Favscreen()),
               );
+              if (mounted) {
+                setState(() {
+                  isSaved = _dbService.isSaved(_spaceData!.date);
+                });
+              }
             }, 
             icon: Icon(Icons.book))
         ],
