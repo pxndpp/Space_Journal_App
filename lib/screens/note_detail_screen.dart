@@ -1,58 +1,84 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nasa_space_story/models/favorite_note.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class NoteDetailScreen extends StatelessWidget {
   final FavoriteNote note;
 
   const NoteDetailScreen({super.key, required this.note});
-  
-Color hexToColor(String code) { // func เอาไว้แปลง hex เป็นสี
-  return Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
-} 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: hexToColor("#403963"),
+      
+      backgroundColor: HexColor("#0E0E0E"),
       appBar: AppBar(
-        title: Text(note.date),
-        backgroundColor: Colors.transparent,
+        title: Text(note.date, style: TextStyle(color: HexColor("#F0E6FF")),),
+        systemOverlayStyle: SystemUiOverlayStyle.light, // ไว้ปรับพวก icon status bar ด้านบนให้มองเห็น
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              HexColor("#0B0B1E"),
+              HexColor("#1A0B2E"),
+              HexColor("#2D1B4E")
+            ],
+          ),
         ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Hero(
-              tag: note.date, //date เป็น Tag เพราะมันไม่ซ้ำกัน
-              child: Image.network(
-                note.imgURL,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              )
-            ),
-            Padding(
-              padding: const EdgeInsets.all(18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    note.date,
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    note.title,
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 15,),
-                  Text('Your note : ', style: const TextStyle(fontSize: 15, color: Colors.blueAccent)),
-                  Text(
-                    note.userNote ?? 'No note clip to this one!',
-                    style: const TextStyle(fontSize: 18, color: Colors.blueAccent),
-                  ),
-                  const SizedBox(height: 15,)
-                ],
+        ),
+        ),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity, // ให้ Container กว้างและสูงเต็มจอ
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              HexColor("#0B0B1E"),
+              HexColor("#1A0B2E"),
+              HexColor("#2D1B4E")
+            ],
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Hero(
+                tag: note.date, //date เป็น Tag เพราะมันไม่ซ้ำกัน
+                child: Image.network(
+                  note.imgURL,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                )
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      note.date,
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: HexColor("#F0E6FF")),
+                    ),
+                    Text(
+                      note.title,
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: HexColor("#E0AAFF").withValues(alpha: 0.8)),
+                    ),
+                    const SizedBox(height: 15,),
+                    Text("Your note : ", style: TextStyle(fontSize: 15, color: HexColor("#F0E6FF"))),
+                    Text(
+                      note.userNote ?? 'No note clip to this one!',
+                      style: TextStyle(fontSize: 18, color: HexColor("#E0AAFF").withValues(alpha: 0.8)),
+                    ),
+                    const SizedBox(height: 15,),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
