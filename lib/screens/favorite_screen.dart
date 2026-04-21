@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nasa_space_story/models/favorite_note.dart';
+import 'package:nasa_space_story/screens/note_detail_screen.dart';
 import 'package:nasa_space_story/services/database_service.dart';
 import 'package:nasa_space_story/widgets/custom_input_modal.dart';
 
@@ -116,21 +117,44 @@ class _FavscreenState extends State<Favscreen>{
                 // ดึงข้อมูลโน้ตออกมาทีละ 1 ตาม index
                 final note = _Favnote[index];
               
-              //TODO: เปลี่ยนเป็น Card
               return ListTile(
-                leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(3),
-                  child: Image.network(note.imgURL, 
-                  fit: BoxFit.cover,
-                  width: 150,
-                  height: 150,
+                leading: Hero(
+                  tag: note.date,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(3),
+                    child: Image.network(note.imgURL, 
+                    fit: BoxFit.cover,
+                    cacheWidth: 200,
+                    ),
                   ),
                 ),
-                title: Text(note.title, style: TextStyle(fontWeight: FontWeight.bold),),
-                subtitle: Text(note.userNote ?? ''),
-                onTap: () => _showEditModal(note),
-                trailing: IconButton(onPressed: () => _ShowConfirmDialog(note.date), icon: Icon(Icons.delete),
-                ) 
+                title: Text(note.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
+                subtitle: Text(note.date),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      tooltip: 'Change Your Note',
+                      onPressed : () => _showEditModal(note), 
+                      icon: Icon(Icons.edit),
+                    ),
+                    SizedBox(width: 15),
+                    IconButton(
+                      tooltip: 'Delete Your Note',
+                      onPressed: () => _ShowConfirmDialog(note.date), 
+                      icon: Icon(Icons.delete),
+                    ),
+                  ]
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NoteDetailScreen(note: note),
+                    ),
+                  );
+                }, 
               );
           },
         ),
