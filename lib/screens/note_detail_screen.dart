@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nasa_space_story/models/favorite_note.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class NoteDetailScreen extends StatelessWidget {
   final FavoriteNote note;
@@ -10,10 +11,9 @@ class NoteDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       backgroundColor: HexColor("#0E0E0E"),
       appBar: AppBar(
-        title: Text(note.date, style: TextStyle(color: HexColor("#F0E6FF")),),
+        title: Text(note.date, style: GoogleFonts.spaceMono(color: HexColor("#F0E6FF"))),
         systemOverlayStyle: SystemUiOverlayStyle.light, // ไว้ปรับพวก icon status bar ด้านบนให้มองเห็น
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -61,17 +61,17 @@ class NoteDetailScreen extends StatelessWidget {
                   children: [
                     Text(
                       note.date,
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: HexColor("#F0E6FF")),
+                      style: GoogleFonts.spaceMono(fontSize: 24, fontWeight: FontWeight.bold, color: HexColor("#F0E6FF")),
                     ),
                     Text(
                       note.title,
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: HexColor("#E0AAFF").withValues(alpha: 0.8)),
+                      style: GoogleFonts.spaceMono(fontSize: 24, fontWeight: FontWeight.bold, color: HexColor("#E0AAFF").withValues(alpha: 0.8)),
                     ),
                     const SizedBox(height: 15,),
-                    Text("Your note : ", style: TextStyle(fontSize: 15, color: HexColor("#F0E6FF"))),
+                    Text("Your note : ", style: GoogleFonts.spaceMono(fontSize: 15, color: HexColor("#F0E6FF"))),                  
                     Text(
-                      note.userNote ?? 'No note clip to this one!',
-                      style: TextStyle(fontSize: 18, color: HexColor("#E0AAFF").withValues(alpha: 0.8)),
+                        note.userNote ?? 'No note clip to this one!',
+                        style: GoogleFonts.spaceMono(fontSize: 18, color: HexColor("#E0AAFF").withValues(alpha: 0.8)),
                     ),
                     const SizedBox(height: 15,),
                   ],
@@ -83,6 +83,4 @@ class NoteDetailScreen extends StatelessWidget {
       ),
     );
   }
-
-  
 }
