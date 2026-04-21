@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nasa_space_story/models/favorite_note.dart';
 import 'package:nasa_space_story/screens/note_detail_screen.dart';
 import 'package:nasa_space_story/services/database_service.dart';
 import 'package:nasa_space_story/widgets/custom_input_modal.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 
 class Favscreen extends StatefulWidget{
@@ -104,8 +106,23 @@ class _FavscreenState extends State<Favscreen>{
 @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('My Journal')),
-      
+      appBar: AppBar(
+        title: Text('My Journal', style: TextStyle(color: HexColor("#F0E6FF")),),
+        systemOverlayStyle: SystemUiOverlayStyle.light, // ไว้ปรับพวก icon status bar ด้านบนให้มองเห็น
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              HexColor("#0B0B1E"),
+              HexColor("#1A0B2E"),
+              HexColor("#2D1B4E")
+            ],
+          ),
+        ),
+        ),
+      ),
       //ถ้า List ว่างเปล่า ให้โชว์ข้อความ
       body: _Favnote.isEmpty
           ? const Center(child: Text('Seem like you dont have any journal yet!'))

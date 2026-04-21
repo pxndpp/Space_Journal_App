@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nasa_space_story/screens/favorite_screen.dart';
 import 'package:nasa_space_story/widgets/custom_input_modal.dart';
 import 'package:nasa_space_story/models/favorite_note.dart';
@@ -7,6 +8,7 @@ import 'package:nasa_space_story/widgets/spacecard.dart';
 import 'package:nasa_space_story/services/api_service.dart';
 import 'package:nasa_space_story/models/apod_entry.dart';
 import 'package:intl/intl.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -107,13 +109,28 @@ class _HomeScreenState extends State<HomeScreen>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueGrey,
-        title: const Text("SPACE JOURNAL"),
+        title: Image.asset('assets/Space_logo_bar.png', fit: BoxFit.contain, height: 55,),
+        systemOverlayStyle: SystemUiOverlayStyle.light, // ไว้ปรับพวก icon status bar ด้านบนให้มองเห็น
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              HexColor("#D3045D").withValues(alpha: 0.7),
+              HexColor("#C77DFF").withValues(alpha: 0.5),
+              HexColor("#0C287B").withValues(alpha: 0.7)
+            ],
+          ),
+        ),
+        ),
         centerTitle: true,
         actions: [
           IconButton(
             //กดสลับไปหน้า Fav list รอให้ปิดหน้าแล้วเช็คเซฟใหม่
             onPressed: () async{
+              //ถ้าโหลดเสร็จให้กดได้ กันระเบิด
+              isLoading ? null :
               await Navigator.push(context,
               MaterialPageRoute(builder: (context) => const Favscreen()),
               );
@@ -123,83 +140,98 @@ class _HomeScreenState extends State<HomeScreen>{
                 });
               }
             }, 
-            icon: Icon(Icons.book))
+            icon: Icon(Icons.book, color: HexColor("#2B384C"),))
         ],
       ),
-      body: isLoading
-          //เช็ค loading ถ้ากำลังโหลดให้แสดงหน้ากำลังโหลด
-          ? const Center(
-            child: CircularProgressIndicator()
-          )
-      : errorMessage != null 
-        ? Center( 
-          //ถ้ามี Error โชว์แค่ Error Message กับปุุ่ม change date
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  Text(
-                    errorMessage!,
-                    style: const TextStyle(color: Colors.red, fontSize: 16),
-                    textAlign: TextAlign.center,),
-                  const SizedBox(height: 16),
-                  IconButton(
-                          tooltip: 'Change date',
-                          onPressed: (){_selectDate();}, 
-                          icon: Icon(Icons.calendar_today),
-                    ),
-                  Text('Select Date'),
-                ],
-              ),
-            ),
-          )
-      : SingleChildScrollView(
-        child:Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (_spaceData != null) 
-              SpaceCard(
-                imgURL: _spaceData!.imgURL, 
-                title: _spaceData!.title,
-                explanation: _spaceData!.explanation,
-                copyright: _spaceData!.copyright,
-                date: _spaceData!.date,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                          tooltip: 'Change date',
-                          onPressed: (){_selectDate();}, 
-                          icon: Icon(Icons.calendar_today),
-                    ),
-                  Text('Change Date'),
-                  SizedBox(width: 30),
-                  IconButton(
-                          tooltip: 'SAVE',
-                          onPressed: (){
-                            //เงื่อนไข ? ถ้าจริง : ถ้าเท็จ
-                            isSaved ? null : 
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true, // เผื่อพิมพ์คีย์บอร์ดแล้วบังหน้าจอ
-                              builder: (context) {
-                                return CustomInputModal(
-                                  onSubmit: (String inputValue) {
-                                    debugPrint("Input val: $inputValue");
-                                    _saveToDatabase(u_note: inputValue);
-                                  },
-                                );
-                              },
-                            );
-                          }, icon: Icon(isSaved ? Icons.favorite : Icons.favorite_border),
-                    ),
-                  Text(isSaved ? 'Saved' : 'Save'),
-                ],
-              ),
-              const SizedBox(height: 30),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity, // ให้ Container กว้างและสูงเต็มจอ
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              HexColor("#D3045D"),
+              HexColor("#0C8EF4")..withValues(alpha: 0.2),
+              HexColor("#A162A1").withValues(alpha: 0.5)
             ],
+          ),
+        ),
+        child: isLoading
+            //เช็ค loading ถ้ากำลังโหลดให้แสดงหน้ากำลังโหลด
+            ? const Center(
+              child: CircularProgressIndicator()
+            )
+        : errorMessage != null 
+          ? Center( 
+            //ถ้ามี Error โชว์แค่ Error Message กับปุุ่ม change date
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    Text(
+                      errorMessage!,
+                      style: const TextStyle(color: Colors.red, fontSize: 16),
+                      textAlign: TextAlign.center,),
+                    const SizedBox(height: 16),
+                    IconButton(
+                            tooltip: 'Change date',
+                            onPressed: (){_selectDate();}, 
+                            icon: Icon(Icons.calendar_today),
+                      ),
+                    Text('Select Date'),
+                  ],
+                ),
+              ),
+            )
+        : SingleChildScrollView(
+          child:Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (_spaceData != null) 
+                SpaceCard(
+                  imgURL: _spaceData!.imgURL, 
+                  title: _spaceData!.title,
+                  explanation: _spaceData!.explanation,
+                  copyright: _spaceData!.copyright,
+                  date: _spaceData!.date,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                            tooltip: 'Change date',
+                            onPressed: (){_selectDate();}, 
+                            icon: Icon(Icons.calendar_today, color: HexColor("#0C287B"),),
+                      ),
+                    Text('Change Date'),
+                    SizedBox(width: 30),
+                    IconButton(
+                            tooltip: 'SAVE',
+                            onPressed: (){
+                              //เงื่อนไข ? ถ้าจริง : ถ้าเท็จ
+                              isSaved ? null : 
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true, // เผื่อพิมพ์คีย์บอร์ดแล้วบังหน้าจอ
+                                builder: (context) {
+                                  return CustomInputModal(
+                                    onSubmit: (String inputValue) {
+                                      debugPrint("Input val: $inputValue");
+                                      _saveToDatabase(u_note: inputValue);
+                                    },
+                                  );
+                                },
+                              );
+                            }, icon: Icon(isSaved ? Icons.favorite : Icons.favorite_border, color: HexColor("#D3045D")),
+                      ),
+                    Text(isSaved ? 'Saved' : 'Save'),
+                  ],
+                ),
+                const SizedBox(height: 30),
+              ],
+            ),
           ),
         ),
       ),
