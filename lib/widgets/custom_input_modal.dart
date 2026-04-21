@@ -2,15 +2,24 @@ import 'package:flutter/material.dart';
 class CustomInputModal extends StatefulWidget {
   // สร้าง Callback Function เพื่อส่งข้อมูลกลับไปให้หน้าหลัก
   final Function(String) onSubmit; 
+  final String? inputText; // รับค่า text เข้าเอาไว้ใช้ตอน Update note ใน DB
 
-  const CustomInputModal({super.key, required this.onSubmit});
+  const CustomInputModal({super.key, required this.onSubmit, this.inputText});
 
   @override
   State<CustomInputModal> createState() => _CustomInputModalState();
 }
 
 class _CustomInputModalState extends State<CustomInputModal> {
-  final TextEditingController _controller = TextEditingController();
+  //เพิ่ม late ให้เป็นการรอรับค่าตอนเริ่มทำงาน
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    // ถ้าไม่มีค่าส่งเข้ามาก็โยนให้เป็น '' แทน
+    _controller = TextEditingController(text: widget.inputText ?? ''); 
+  }
 
   @override
   void dispose() {
