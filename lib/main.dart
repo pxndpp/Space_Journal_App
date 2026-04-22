@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:nasa_space_story/models/favorite_note.dart';
 import 'screens/home_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -26,6 +27,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Space Journal',
       theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          //เปลี่ยนสีปุ่ม back
+          iconTheme: IconThemeData(
+            color: HexColor("#E0AAFF")
+          ),
+        ),
         fontFamily: GoogleFonts.exo2().fontFamily, 
       ),
       
