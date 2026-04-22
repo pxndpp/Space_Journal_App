@@ -32,6 +32,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dotenv: ^6.0.0
+  flutter_native_splash: ^2.4.7
   google_fonts: ^8.0.2
   hexcolor: ^3.1.3
   hive_ce: ^2.19.3
@@ -99,3 +100,12 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+
+flutter_native_splash:
+  color: "#1A1A2E" 
+  image: "assets/Space_logo.png" 
+  fullscreen: false 
+  android_12:
+    color: "#1A1A2E"
+    image: "assets/Space_logo.png" 
