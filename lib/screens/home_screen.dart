@@ -151,9 +151,9 @@ class _HomeScreenState extends State<HomeScreen>{
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              HexColor("#D3045D"),
-              HexColor("#0C8EF4")..withValues(alpha: 0.2),
-              HexColor("#A162A1").withValues(alpha: 0.5)
+              HexColor("#D3045D").withValues(alpha: 0.7),
+              HexColor("#C77DFF").withValues(alpha: 0.5),
+              HexColor("#0C287B").withValues(alpha: 0.7)
             ],
           ),
         ),
@@ -171,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen>{
                   children: [
                     Text(
                       errorMessage!,
-                      style: const TextStyle(color: Colors.red, fontSize: 16),
+                      style: const TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: 16),
                       textAlign: TextAlign.center,),
                     const SizedBox(height: 16),
                     IconButton(
