@@ -31,7 +31,15 @@ class SpaceCard extends StatelessWidget {
                     style: TextStyle(
                     fontWeight: FontWeight.bold)
             ),
-          Image.network(imgURL),
+          SizedBox(height: 16),
+          Image.network(
+            imgURL, 
+            //เขียนดัก error ไว้เพราะบางที apod มาเป็น vid
+            errorBuilder: (context, error, stackTrace) {
+              return const Icon(Icons.broken_image, color: Colors.grey);
+              },
+            cacheWidth: 800,
+            ),
           SizedBox(height: 16),
           Text(title, 
                     style: TextStyle(

@@ -52,6 +52,10 @@ class NoteDetailScreen extends StatelessWidget {
                   note.imgURL,
                   width: double.infinity,
                   fit: BoxFit.cover,
+                  cacheWidth: 800,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(Icons.broken_image, color: Colors.grey);
+                  },
                 )
               ),
               Padding(

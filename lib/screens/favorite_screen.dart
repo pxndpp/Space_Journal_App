@@ -139,10 +139,15 @@ class _FavscreenState extends State<Favscreen>{
                   tag: note.date,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(3),
-                    child: Image.network(note.imgURL, 
-                    fit: BoxFit.cover,
-                    cacheWidth: 200,
-                    ),
+                    child: 
+                      Image.network(
+                        note.imgURL, 
+                        fit: BoxFit.cover,
+                        cacheWidth: 200,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(Icons.broken_image, color: Colors.grey);
+                        },
+                      ),
                   ),
                 ),
                 title: Text(note.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
