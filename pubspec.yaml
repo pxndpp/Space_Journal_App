@@ -104,8 +104,9 @@ flutter:
 
 flutter_native_splash:
   color: "#1A1A2E" 
-  image: "assets/Space_logo.png" 
-  fullscreen: false 
+  background_image: "assets/Space_logo.png"
+  fullscreen: true
+  android_gravity: fill
   android_12:
     color: "#1A1A2E"
-    image: "assets/Space_logo.png" 
+    image: "assets/Space_logo.png"
