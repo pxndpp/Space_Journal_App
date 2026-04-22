@@ -63,10 +63,10 @@ class NoteDetailScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    /*Text(
                       note.date,
                       style: GoogleFonts.spaceMono(fontSize: 24, fontWeight: FontWeight.bold, color: HexColor("#F0E6FF")),
-                    ),
+                    ), */
                     Text(
                       note.title,
                       style: GoogleFonts.spaceMono(fontSize: 24, fontWeight: FontWeight.bold, color: HexColor("#E0AAFF").withValues(alpha: 0.8)),

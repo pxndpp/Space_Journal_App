@@ -45,8 +45,8 @@ class _HomeScreenState extends State<HomeScreen>{
     try{
       // ส่งวันที่ไปและเรียก api พร้อมรอจนเสร็จ
       _spaceData = await ApiService().fetchData(date: date);
-      //เช็คว่ารูปของวันที่ส่งค่าไปเซฟแล้วยัง
-      isSaved = _dbService.isSaved(_spaceData!.date);
+      //เช็คว่ารูปของวันที่ส่งค่าไปเซฟแล้วยัง //เขียนไว้แก้บัคตอนดึง api แล้วเป็น 503 ถ้า null ปัดเป็น false เลยกันระเบิด
+      isSaved = (_spaceData?.date != null) ? _dbService.isSaved(_spaceData!.date) : false;
     } catch(e){
           errorMessage = 'Look like ours engine is down!, Let wait for a few minute';
           debugPrint('Something wrong : $e');
@@ -96,7 +96,8 @@ class _HomeScreenState extends State<HomeScreen>{
       }
       if (mounted) {
         setState(() {
-          isSaved = _dbService.isSaved(_spaceData!.date);
+          //เขียนไว้แก้บัคตอนดึง api แล้วเป็น 503 ถ้า null ปัดเป็น false เลยกันระเบิด
+          isSaved = (_spaceData?.date != null) ? _dbService.isSaved(_spaceData!.date) : false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('SAVED')),
@@ -128,15 +129,17 @@ class _HomeScreenState extends State<HomeScreen>{
         actions: [
           IconButton(
             //กดสลับไปหน้า Fav list รอให้ปิดหน้าแล้วเช็คเซฟใหม่
-            onPressed: () async{
+            onPressed: isLoading  //ถ้าโหลดเสร็จให้กดได้ กันระเบิด
+            ? null 
+            : () async{
               //ถ้าโหลดเสร็จให้กดได้ กันระเบิด
-              isLoading ? null :
               await Navigator.push(context,
               MaterialPageRoute(builder: (context) => const Favscreen()),
               );
               if (mounted) {
                 setState(() {
-                  isSaved = _dbService.isSaved(_spaceData!.date);
+                  //เขียนไว้แก้บัคตอนดึง api แล้วเป็น 503 ถ้า null ปัดเป็น false เลยกันระเบิด
+                  isSaved = (_spaceData?.date != null) ? _dbService.isSaved(_spaceData!.date) : false;
                 });
               }
             }, 
