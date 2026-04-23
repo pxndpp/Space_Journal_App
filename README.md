@@ -14,12 +14,6 @@
 
 ---
 
-## 📸 Screenshots
-
-> *(Add screenshots here)*
-
----
-
 ## 🛠️ Tech Stack
 
 | Layer | Technology |
